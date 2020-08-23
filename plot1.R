@@ -6,13 +6,15 @@ download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_p
 
 unzip("hpc.zip")
 
-dat <- read.table("household_power_consumption.txt", sep=";", header=TRUE)
-dat$Date <- as.Date(dat$Date, "%d/%m/%y")
-dat2 <- subset(dat, Date >= "2020-01-01" & Date <= "2020-02-02" )
-# View(dat2)
+dat <- read.table("household_power_consumption.txt", sep=";", header=TRUE, stringsAsFactors=F)
+dat1 <- subset(dat, Date %in% c("1/2/2007","2/2/2007"))
+dat1$Date <- as.Date(dat1$Date, format="%d/%m/%Y")
+datetime <- paste(as.Date(dat1$Date), dat1$Time)
+dat1$Datetime <- as.POSIXct(datetime)
+View(dat1)
 
 png(filename="plot1.png", width=480, height=480)
-hist(as.numeric(dat2$Global_active_power), col="red",main="Global Active Power", 
+hist(as.numeric(dat1$Global_active_power), col="red",main="Global Active Power", 
      xlab="Global Active Power (kilowatts)")
 
 dev.off()
